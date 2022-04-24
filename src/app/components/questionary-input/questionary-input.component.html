@@ -1,0 +1,37 @@
+<div class="q-input-main d-flex flex-column">
+  <div class="d-flex">
+    <div>{{question.title}}</div>
+
+      <div *ngIf="question.type==='text'">
+        <input type="text" [name]="question.name" [(ngModel)]="answer" (change)="update()">
+      </div>
+
+      <div *ngIf="question.type==='number'">
+        <input type="number" min="1" max="100" [name]="question.name" [(ngModel)]="answer" (change)="update()">
+      </div>
+
+      <div *ngIf="question.type==='select'">
+        <select [name]="question.name" [(ngModel)]="answer" (change)="update()">
+          <option *ngFor="let opt of question.options" [value]="opt" >{{opt}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="question.type==='radio'">
+        <input type="radio" [name]="question.name" value="1" [(ngModel)]="answer" (change)="update()">
+        <input type="radio" [name]="question.name" value="0" [(ngModel)]="answer" (change)="update()">
+      </div>
+  </div>
+
+
+  <div *ngFor="let question of (question.childItems || [])" class="pl-6">
+
+    <app-questionary-input
+      [level]="level+1"
+      [parentAnswer]="answer"
+      [question]="question"
+      *ngIf="(answer == question.parentAnswer) || !question.parentAnswer"
+      (updateEvent)="updateEventHandler($event)"
+    >
+    </app-questionary-input>
+  </div>
+</div>
